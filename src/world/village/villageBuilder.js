@@ -6,7 +6,8 @@ import { setupEnvironment } from './environment/environment.js'
 import { createTerrain }    from './terrain/terrain.js'
 
 // roads
-import { createRoads } from './roads/roads.js'
+import { createRoads }      from './roads/roads.js'
+import { createBackStreet } from './roads/backStreet.js'
 
 // ── FOUNDATION PASS: structures, props, signs, lamps are DISABLED ────────────
 // Uncomment each block when ready to add that layer back.
@@ -65,6 +66,7 @@ export function addVillageWorld(ctx) {
 
   // ── roads ───────────────────────────────────────────────────────────────
   createRoads(ctx)
+  createBackStreet(ctx)      // dirt outer path connecting the planned outer zones
 
   // ── nature: trees only ───────────────────────────
   // Structures / props spawn after ctx is populated — keep setActiveSpawnContext
