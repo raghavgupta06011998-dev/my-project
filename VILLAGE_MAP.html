@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Raghav's Portfolio Village — Architecture Map</title>
+<style>
+  :root {
+    --bg: #1a1a1a;
+    --panel: #2a2a2a;
+    --accent: #f0c060;
+    --text: #eee;
+    --muted: #aaa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 24px;
+    padding: 24px;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  @media (max-width: 1100px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+  .map-wrap, .sidebar {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 20px 22px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  h1 {
+    margin: 0 0 6px 0;
+    font-size: 22px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+  .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+  h2 {
+    font-size: 14px;
+    color: var(--accent);
+    margin: 18px 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 4px;
+  }
+  h2:first-of-type { margin-top: 0; }
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: linear-gradient(180deg, #ddd1a8 0%, #c8b885 100%);
+    border-radius: 6px;
+  }
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+    font-size: 13px;
+  }
+  .swatch {
+    width: 18px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid #555;
+    flex-shrink: 0;
+  }
+  .swatch.line { height: 0; border-top-width: 4px; border-radius: 0; border-left:0; border-right:0; border-bottom:0; }
+  .swatch.dot { border-radius: 50%; width: 10px; height: 10px; margin-left: 4px; }
+  ul.tight { padding-left: 18px; margin: 6px 0; font-size: 13px; }
+  ul.tight li { margin: 2px 0; }
+  .zone-row {
+    padding: 6px 0;
+    border-bottom: 1px solid #3a3a3a;
+    font-size: 13px;
+  }
+  .zone-row:last-child { border-bottom: none; }
+  .zone-name { color: var(--accent); font-weight: 600; }
+  .zone-coord { color: var(--muted); font-size: 11px; font-family: ui-monospace, monospace; }
+  .status-done { color: #6cdd6c; font-size: 11px; }
+  .status-new  { color: #ffb84d; font-size: 11px; }
+  .status-plan { color: #ff7474; font-size: 11px; }
+  .note {
+    font-size: 12px;
+    color: var(--muted);
+    background: #222;
+    padding: 8px 10px;
+    border-left: 3px solid var(--accent);
+    border-radius: 3px;
+    margin-top: 12px;
+  }
+
+  /* SVG styles */
+  .grid-line { stroke: #b6a47c; stroke-width: 0.5; opacity: 0.5; }
+  .outer-bg  { fill: #d6c8a8; }
+  .inner-green { fill: #a8d18a; opacity: 0.55; }
+  .road-cobble { fill: #777; stroke: #4a4a4a; stroke-width: 0.7; }
+  .fence-line { fill: none; stroke: #6b3f1c; stroke-width: 1.4; stroke-dasharray: 3,2; }
+  .hero-house { fill: #5a3018; stroke: #2a1208; stroke-width: 1.2; }
+  .side-house { fill: #8a5436; stroke: #3a1f10; stroke-width: 0.8; }
+  .zone-market  { fill: #e89a5a; fill-opacity: 0.45; stroke: #c97b3f; stroke-width: 1.8; }
+  .zone-park    { fill: #88c870; fill-opacity: 0.45; stroke: #4a8038; stroke-width: 1.8; }
+  .zone-farm    { fill: #d4b070; fill-opacity: 0.45; stroke: #9c7838; stroke-width: 1.8; }
+  .zone-school  { fill: #8aa0c8; fill-opacity: 0.45; stroke: #506890; stroke-width: 1.8; stroke-dasharray: 4,3; }
+  .zone-future  { fill: #3a6240; fill-opacity: 0.35; stroke: #1a3820; stroke-width: 1.5; stroke-dasharray: 6,4; }
+  .back-street  { fill: none; stroke: #8a6840; stroke-width: 7; stroke-dasharray: 6,4; stroke-linecap: round; opacity: 0.88; }
+  .field-fence  { fill: #c8e088; fill-opacity: 0.5; stroke: #6b3f1c; stroke-width: 1.4; stroke-dasharray: 3,2; }
+  .rock         { fill: #6e6e6e; stroke: #3a3a3a; stroke-width: 0.5; }
+  .tree-bg      { fill: #2c5230; stroke: #1a3018; stroke-width: 0.4; }
+  .lamp         { fill: #f0c060; stroke: #8a6420; stroke-width: 0.4; }
+  .sign         { fill: #6b3f1c; stroke: #2a1808; stroke-width: 0.4; }
+  .bench        { fill: #4a2812; stroke: #1a0a04; stroke-width: 0.4; }
+  .prop-dot     { fill: #5a3018; stroke: #1a0a04; stroke-width: 0.4; }
+  .spawn-dot    { fill: #ff5050; stroke: #8a0000; stroke-width: 1.5; }
+  .arch         { fill: #3a2010; stroke: #1a0808; stroke-width: 1; }
+  .bridge       { fill: #5a3818; stroke: #1a0a04; stroke-width: 1; }
+  .flow         { fill: none; stroke: #ff7f00; stroke-width: 3.5; stroke-linecap: round; opacity: 0.85; }
+  .flow-future  { fill: none; stroke: #ff7f00; stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 6,4; opacity: 0.7; }
+
+  .label         { font-family: -apple-system, sans-serif; font-size: 14px; fill: #1a0a04; text-anchor: middle; font-weight: 700; }
+  .label-light   { fill: #f0e8d0; }
+  .label-zone    { font-size: 17px; font-weight: 800; letter-spacing: 0.5px; }
+  .label-small   { font-size: 10px; font-weight: 600; }
+  .label-coord   { font-size: 10px; fill: #5a4828; font-weight: 500; font-family: ui-monospace, monospace; }
+  .label-flow    { font-size: 11px; font-weight: 700; fill: #c95f00; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- LEFT: SVG MAP                                                   -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="map-wrap">
+    <h1>Raghav's Portfolio Village — Architecture Map</h1>
+    <div class="subtitle">Top-down view. North = up (−Z). 1 cell = 10 world units. Existing village = solid · Planned = dashed.</div>
+
+    <svg viewBox="0 0 900 820" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#ff7f00"/>
+        </marker>
+      </defs>
+
+      <!-- background outer (gravel tone) -->
+      <rect class="outer-bg" x="0" y="0" width="900" height="820"/>
+
+      <!-- inner green lawn zone (matches terrain inner zone ~x±110, z−142…+58) -->
+      <ellipse class="inner-green" cx="450" cy="475" rx="330" ry="300"/>
+
+      <!-- ── Zone J: FUTURE FOREST / MOUNTAIN (top of map) ───────────────── -->
+      <rect class="zone-future" x="20" y="20" width="860" height="170"/>
+      <text class="label label-zone label-light" x="450" y="80">⛰  FUTURE — FOREST &amp; MOUNTAIN  (Zone J)</text>
+      <text class="label label-small label-light" x="450" y="100">Skills Forest · Career Mountain · onward narrative</text>
+      <text class="label label-small label-light" x="450" y="118">plan only · not implemented yet</text>
+
+      <!-- background tree band z=-110…-140 -->
+      <g opacity="0.7">
+        <circle class="tree-bg" cx="270" cy="284" r="6"/>
+        <circle class="tree-bg" cx="312" cy="254" r="6"/>
+        <circle class="tree-bg" cx="348" cy="278" r="6"/>
+        <circle class="tree-bg" cx="435" cy="230" r="6"/>
+        <circle class="tree-bg" cx="474" cy="212" r="6"/>
+        <circle class="tree-bg" cx="456" cy="260" r="6"/>
+        <circle class="tree-bg" cx="552" cy="278" r="6"/>
+        <circle class="tree-bg" cx="594" cy="248" r="6"/>
+        <circle class="tree-bg" cx="636" cy="272" r="6"/>
+      </g>
+
+      <!-- outer rocks (28 from outerRocks.js) -->
+      <g>
+        <!-- back-left cluster -->
+        <circle class="rock" cx="162" cy="254" r="5"/>
+        <circle class="rock" cx="210" cy="218" r="5"/>
+        <circle class="rock" cx="114" cy="290" r="6"/>
+        <circle class="rock" cx="84"  cy="230" r="5"/>
+        <circle class="rock" cx="180" cy="284" r="5"/>
+        <!-- back-right cluster -->
+        <circle class="rock" cx="738" cy="254" r="5"/>
+        <circle class="rock" cx="690" cy="218" r="5"/>
+        <circle class="rock" cx="786" cy="290" r="6"/>
+        <circle class="rock" cx="816" cy="230" r="5"/>
+        <circle class="rock" cx="720" cy="284" r="5"/>
+        <!-- back-center deep -->
+        <circle class="rock" cx="384" cy="122" r="6"/>
+        <circle class="rock" cx="486" cy="98"  r="6"/>
+        <circle class="rock" cx="552" cy="140" r="5"/>
+        <circle class="rock" cx="306" cy="146" r="6"/>
+        <!-- mid-left edge -->
+        <circle class="rock" cx="126" cy="434" r="4"/>
+        <circle class="rock" cx="90"  cy="356" r="5"/>
+        <circle class="rock" cx="114" cy="524" r="4"/>
+        <circle class="rock" cx="78"  cy="602" r="4"/>
+        <!-- mid-right edge -->
+        <circle class="rock" cx="774" cy="434" r="4"/>
+        <circle class="rock" cx="810" cy="356" r="5"/>
+        <circle class="rock" cx="786" cy="524" r="4"/>
+        <circle class="rock" cx="822" cy="602" r="4"/>
+        <!-- behind houses -->
+        <circle class="rock" cx="666" cy="404" r="3"/>
+        <circle class="rock" cx="234" cy="404" r="3"/>
+        <circle class="rock" cx="612" cy="326" r="3"/>
+        <circle class="rock" cx="288" cy="326" r="3"/>
+        <!-- front-side framing -->
+        <circle class="rock" cx="228" cy="698" r="4"/>
+        <circle class="rock" cx="672" cy="692" r="4"/>
+      </g>
+
+      <!-- ── BACK STREET (planned dirt loop) ─────────────────────────────── -->
+      <path class="back-street" d="M 345 605
+        C 270 580, 200 540, 216 470
+        C 200 400, 200 380, 216 362
+        C 240 320, 320 310, 360 320
+        C 420 314, 480 314, 540 320
+        C 580 310, 660 320, 684 362
+        C 700 380, 700 400, 684 470
+        C 700 540, 630 580, 555 605"/>
+      <text class="label label-small" x="115" y="425" transform="rotate(-78, 115, 425)" fill="#5a3818">— BACK STREET (planned) —</text>
+
+      <!-- ── ZONE F: PARK (back-left, planned) ──────────────────────────── -->
+      <rect class="zone-park" x="170" y="320" width="92" height="92" rx="6"/>
+      <text class="label label-zone" x="216" y="358">🌳 PARK</text>
+      <text class="label label-small" x="216" y="375">Zone F · planned</text>
+      <text class="label-coord" x="216" y="390">(−78,−86)</text>
+      <text class="label label-small" x="216" y="404">well · benches · trees</text>
+
+      <!-- ── ZONE G: FARM (back-right, existing first-pass) ─────────────── -->
+      <ellipse class="zone-farm" cx="684" cy="380" rx="62" ry="58"/>
+      <text class="label label-zone" x="684" y="368">🚜 FARM</text>
+      <text class="label label-small" x="684" y="386">Zone G · 1st pass ✓</text>
+      <text class="label-coord" x="684" y="400">(78,−80)</text>
+      <text class="label label-small" x="684" y="414">expand: crops · field</text>
+
+      <!-- ── ZONE E: MARKET (front-left, existing first-pass) ──────────── -->
+      <ellipse class="zone-market" cx="354" cy="585" rx="44" ry="36"/>
+      <text class="label label-zone" x="354" y="582">🛒 MARKET</text>
+      <text class="label-coord" x="354" y="598">(−32,−13) · 1st pass ✓</text>
+
+      <!-- ── ZONE H: SCHOOL / COMMUNITY (front-right, planned) ──────────── -->
+      <ellipse class="zone-school" cx="540" cy="585" rx="40" ry="34"/>
+      <text class="label label-zone" x="540" y="582">🏫 SCHOOL</text>
+      <text class="label-coord" x="540" y="598">(30,−15) · planned</text>
+
+      <!-- ── ROADS ──────────────────────────────────────────────────────── -->
+      <!-- main loop annulus (outer R=42 = 126px, inner R=28 = 84px) -->
+      <path class="road-cobble" fill-rule="evenodd"
+        d="M 450 350 a 126 126 0 1 0 0.1 0 z
+           M 450 392 a 84 84 0 1 1 -0.1 0 z"/>
+      <!-- approach road (z=+26…−6, x≈0 ±7) -->
+      <path class="road-cobble" d="M 429 602 Q 444 650 429 698 L 471 698 Q 456 650 471 602 Z"/>
+      <!-- north road (z=−90…−130, x≈0 ±6) -->
+      <rect class="road-cobble" x="432" y="230" width="42" height="120"/>
+
+      <!-- ── HERO ESTATE (Zone A) ──────────────────────────────────────── -->
+      <!-- fence circle R=26 = 78px around hero (450, 476) -->
+      <circle class="fence-line" cx="450" cy="476" r="78"/>
+      <!-- gate gap at front (z = −22 → svgY=554) — approximate by white short segment -->
+      <line x1="438" y1="554" x2="462" y2="554" stroke="#a8d18a" stroke-width="3"/>
+      <!-- hero house — scale 1.55, ~36 wide × 22 deep -->
+      <rect class="hero-house" x="396" y="443" width="108" height="66" rx="2"/>
+      <text class="label label-light" x="450" y="478">HERO HOUSE</text>
+      <text class="label label-small label-light" x="450" y="493">(0,−48) · Zone A ✓</text>
+
+      <!-- ── 8 SIDE HOUSES ──────────────────────────────────────────────── -->
+      <g>
+        <rect class="side-house" x="554" y="346" width="38" height="50" rx="1"/>
+        <rect class="side-house" x="605" y="403" width="38" height="50" rx="1"/>
+        <rect class="side-house" x="602" y="487" width="38" height="50" rx="1"/>
+        <rect class="side-house" x="557" y="547" width="38" height="50" rx="1"/>
+        <rect class="side-house" x="305" y="547" width="38" height="50" rx="1"/>
+        <rect class="side-house" x="260" y="487" width="38" height="50" rx="1"/>
+        <rect class="side-house" x="257" y="403" width="38" height="50" rx="1"/>
+        <rect class="side-house" x="308" y="346" width="38" height="50" rx="1"/>
+      </g>
+      <text class="label label-small label-light" x="450" y="335">8 side houses around the loop (Zone C)</text>
+
+      <!-- ── STEP 1 STREETLIGHTS (12) ──────────────────────────────────── -->
+      <g>
+        <!-- approach pairs at z=20/8/-4, x=±9 -->
+        <circle class="lamp" cx="423" cy="590" r="3.5"/>
+        <circle class="lamp" cx="477" cy="590" r="3.5"/>
+        <circle class="lamp" cx="423" cy="626" r="3.5"/>
+        <circle class="lamp" cx="477" cy="626" r="3.5"/>
+        <circle class="lamp" cx="423" cy="662" r="3.5"/>
+        <circle class="lamp" cx="477" cy="662" r="3.5"/>
+        <!-- loop lights at R=45, 6 angles -->
+        <circle class="lamp" cx="518" cy="359" r="3.5"/>
+        <circle class="lamp" cx="585" cy="476" r="3.5"/>
+        <circle class="lamp" cx="518" cy="593" r="3.5"/>
+        <circle class="lamp" cx="383" cy="593" r="3.5"/>
+        <circle class="lamp" cx="315" cy="476" r="3.5"/>
+        <circle class="lamp" cx="383" cy="359" r="3.5"/>
+      </g>
+
+      <!-- ── STEP 1 SIGNS (2) ──────────────────────────────────────────── -->
+      <polygon class="sign" points="486,587 494,587 490,576"/>
+      <polygon class="sign" points="471,332 479,332 475,322"/>
+
+      <!-- ── STEP 1 BENCHES (4) ─────────────────────────────────────────── -->
+      <g>
+        <rect class="bench" x="406" y="649" width="14" height="6"/>
+        <rect class="bench" x="480" y="649" width="14" height="6"/>
+        <rect class="bench" x="310" y="473" width="6" height="14"/>
+        <rect class="bench" x="584" y="473" width="6" height="14"/>
+      </g>
+
+      <!-- ── STEP 1 STORAGE clusters (4 spots: barrel+bucket) ─────────── -->
+      <g>
+        <circle class="prop-dot" cx="597" cy="428" r="3"/>
+        <circle class="prop-dot" cx="303" cy="428" r="3"/>
+        <circle class="prop-dot" cx="597" cy="524" r="3"/>
+        <circle class="prop-dot" cx="303" cy="524" r="3"/>
+      </g>
+
+      <!-- ── SPAWN + ENTRANCE ARCH ──────────────────────────────────────── -->
+      <rect class="arch" x="436" y="678" width="28" height="14" rx="1"/>
+      <text class="label label-small label-light" x="450" y="688">⛩ ARCH</text>
+      <circle class="spawn-dot" cx="450" cy="650" r="8"/>
+      <text class="label label-small" x="450" y="635">▶ SPAWN</text>
+      <text class="label-coord" x="450" y="715">"RAGHAV'S WORLD"  (z=+22)</text>
+
+      <!-- ── BRIDGE ────────────────────────────────────────────────────── -->
+      <rect class="bridge" x="440" y="222" width="28" height="12" rx="1"/>
+      <text class="label label-small" x="454" y="216">BRIDGE</text>
+      <text class="label-coord" x="454" y="248">(2,−130)</text>
+
+      <!-- ── MOVEMENT FLOW ARROWS (orange) ─────────────────────────────── -->
+      <!-- arch → spawn → approach → loop front -->
+      <path class="flow" d="M 450 678 L 450 540" marker-end="url(#arrowhead)"/>
+      <!-- approach branch to market -->
+      <path class="flow" d="M 428 575 Q 395 580 365 580" marker-end="url(#arrowhead)"/>
+      <!-- loop front to hero estate (passive — the player can enter the fence) -->
+      <!-- market → back street → park -->
+      <path class="flow" d="M 340 580 Q 240 540 220 405" marker-end="url(#arrowhead)"/>
+      <!-- park → north (toward bridge) -->
+      <path class="flow" d="M 230 340 Q 340 285 440 270" marker-end="url(#arrowhead)"/>
+      <!-- across back to farm -->
+      <path class="flow" d="M 470 270 Q 590 290 670 350" marker-end="url(#arrowhead)"/>
+      <!-- farm → back street → school -->
+      <path class="flow" d="M 680 410 Q 660 530 555 580" marker-end="url(#arrowhead)"/>
+      <!-- school → loop -->
+      <path class="flow" d="M 540 565 Q 510 510 475 470" marker-end="url(#arrowhead)"/>
+      <!-- north road → future forest (dashed — future) -->
+      <path class="flow-future" d="M 454 350 L 454 200" marker-end="url(#arrowhead)"/>
+
+      <!-- ── COORDINATE GRID LABELS ────────────────────────────────────── -->
+      <g class="label-coord">
+        <text x="6" y="650">z=+10 (spawn)</text>
+        <text x="6" y="476">z=−48 (hero)</text>
+        <text x="6" y="230">z=−130 (bridge)</text>
+        <text x="0" y="190">←  future zone J  ↑</text>
+        <text x="450" y="812" text-anchor="middle">x=0  ·  +X right  ·  +Z south  ·  north = up</text>
+      </g>
+
+    </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- RIGHT: SIDEBAR                                                  -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="sidebar">
+
+    <h2>Map legend</h2>
+    <div class="legend-row"><div class="swatch" style="background:#5a3018"></div>Hero house</div>
+    <div class="legend-row"><div class="swatch" style="background:#8a5436"></div>Side houses (8)</div>
+    <div class="legend-row"><div class="swatch" style="background:#777"></div>Cobblestone roads</div>
+    <div class="legend-row"><div class="swatch" style="border-color:#6b3f1c; border-style:dashed; background:transparent"></div>Hero fence</div>
+    <div class="legend-row"><div class="swatch" style="background:#a8d18a"></div>Inner green lawn</div>
+    <div class="legend-row"><div class="swatch" style="background:#d6c8a8"></div>Outer dry / gravel</div>
+    <hr style="border:0; border-top:1px solid #3a3a3a; margin: 10px 0">
+    <div class="legend-row"><div class="swatch" style="background:#e89a5a"></div>Market zone (E) ✓</div>
+    <div class="legend-row"><div class="swatch" style="background:#88c870"></div>Park zone (F) — planned</div>
+    <div class="legend-row"><div class="swatch" style="background:#d4b070"></div>Farm zone (G) ✓</div>
+    <div class="legend-row"><div class="swatch" style="background:#8aa0c8"></div>School zone (H) — planned</div>
+    <div class="legend-row"><div class="swatch" style="background:#3a6240"></div>Future forest/mountain (J)</div>
+    <div class="legend-row"><div class="swatch line" style="border-top:4px dashed #8a6840; height:0; width:18px"></div>Back street (D) — planned</div>
+    <div class="legend-row"><div class="swatch line" style="border-top:3px solid #ff7f00; height:0; width:18px"></div>Movement flow</div>
+    <hr style="border:0; border-top:1px solid #3a3a3a; margin: 10px 0">
+    <div class="legend-row"><div class="swatch dot" style="background:#f0c060"></div>Streetlight (Step 1)</div>
+    <div class="legend-row"><div class="swatch dot" style="background:#6b3f1c"></div>Sign (Step 1)</div>
+    <div class="legend-row"><div class="swatch" style="background:#4a2812; height:8px"></div>Bench (Step 1)</div>
+    <div class="legend-row"><div class="swatch dot" style="background:#5a3018"></div>Storage cluster (Step 1)</div>
+    <div class="legend-row"><div class="swatch" style="background:#6e6e6e"></div>Outer rock</div>
+    <div class="legend-row"><div class="swatch dot" style="background:#2c5230"></div>Background tree</div>
+    <div class="legend-row"><div class="swatch dot" style="background:#ff5050"></div>Player spawn</div>
+
+    <h2>Zones</h2>
+    <div class="zone-row"><span class="zone-name">A · Hero estate</span> <span class="status-done">✓ built</span><br><span class="zone-coord">(0,−48) · fence R=26</span></div>
+    <div class="zone-row"><span class="zone-name">B · Front arrival</span> <span class="status-done">✓ built</span><br><span class="zone-coord">(0,+10…+26) · spawn + arch</span></div>
+    <div class="zone-row"><span class="zone-name">C · Main circular street</span> <span class="status-done">✓ built</span><br><span class="zone-coord">loop R=28–42 around hero</span></div>
+    <div class="zone-row"><span class="zone-name">D · Back street</span> <span class="status-new">▲ planned</span><br><span class="zone-coord">dirt path · R≈70 outer loop</span></div>
+    <div class="zone-row"><span class="zone-name">E · Market</span> <span class="status-done">✓ 1st pass</span><br><span class="zone-coord">(−32,−13) · front-left belt</span></div>
+    <div class="zone-row"><span class="zone-name">F · Park</span> <span class="status-new">▲ planned</span><br><span class="zone-coord">(−78,−86) · back-left · fenced</span></div>
+    <div class="zone-row"><span class="zone-name">G · Farm</span> <span class="status-done">✓ 1st pass</span><br><span class="zone-coord">(78,−80) · back-right working corner</span></div>
+    <div class="zone-row"><span class="zone-name">H · School / community</span> <span class="status-new">▲ planned</span><br><span class="zone-coord">(30,−15) · front-right · placeholder</span></div>
+    <div class="zone-row"><span class="zone-name">I · Outer rocky / nature</span> <span class="status-done">✓ 1st pass</span><br><span class="zone-coord">R&gt;90 · 28 rocks + 19 bg trees</span></div>
+    <div class="zone-row"><span class="zone-name">J · Future forest/mountain</span> <span class="status-plan">✕ plan only</span><br><span class="zone-coord">beyond z=−140 · north of bridge</span></div>
+
+    <h2>Movement flow</h2>
+    <ul class="tight">
+      <li><b>Arrival:</b> Spawn → arch → approach</li>
+      <li><b>Hero (story):</b> approach → loop → hero estate</li>
+      <li><b>Social:</b> loop → MARKET (front-left)</li>
+      <li><b>Outer ring (back street):</b> Market → Park → North → Farm → School → loop</li>
+      <li><b>Onward (future):</b> North road → bridge → Forest → Mountain</li>
+    </ul>
+
+    <h2>Build order</h2>
+    <ul class="tight">
+      <li>1 — Back street (dirt path)</li>
+      <li>2 — Market polish (wagon, produce)</li>
+      <li>3 — Park zone</li>
+      <li>4 — Farm expansion (field + crops)</li>
+      <li>5 — School / community</li>
+      <li>6 — Outer terrain & nature</li>
+      <li>7 — Detailing pass (per-house)</li>
+      <li>8 — Optimization</li>
+    </ul>
+
+    <div class="note">
+      <b>Status:</b> nothing implemented from this map. Awaiting your approval (and answers to the 5 open decisions in <code>VILLAGE_BLUEPRINT_V2.md</code>) before Step 1.
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

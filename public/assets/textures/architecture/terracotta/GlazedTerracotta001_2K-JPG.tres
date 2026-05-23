@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="acg_pzxr13ft"]
+
+[ext_resource type="Texture2D" uid="uid://acg_y2mtu97c" id="Color" path="./GlazedTerracotta001_2K-JPG_Color.jpg"]
+[ext_resource type="Texture2D" uid="uid://acg_q5mui0fx" id="Displacement" path="./GlazedTerracotta001_2K-JPG_Displacement.jpg"]
+[ext_resource type="Texture2D" uid="uid://acg_jdkvcg2l" id="Roughness" path="./GlazedTerracotta001_2K-JPG_Roughness.jpg"]
+[ext_resource type="Texture2D" uid="uid://acg_7qzl64w0" id="NormalGL" path="./GlazedTerracotta001_2K-JPG_NormalGL.jpg"]
+[resource]
+albedo_texture = ExtResource("Color")
+roughness_texture = ExtResource("Roughness")
+roughness_texture_channel = 4
+normal_texture = ExtResource("NormalGL")
+normal_enabled = true
+heightmap_texture = ExtResource("Displacement")
+heightmap_scale = 1.0
+heightmap_enabled = true
