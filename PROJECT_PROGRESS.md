@@ -30,6 +30,13 @@
 6. Build farm zone.
 7. Add school/community placeholder.
 
+## Documentation
+PROJECT_FULL_CONTEXT.md created (2026-05-23).
+- Full project vision, tech stack, folder/file structure
+- All active assets, disabled files, and staged-but-unimplemented assets (cliff models)
+- Complete zone status, design rules, protected elements
+- Recommended build order and git safety notes
+
 ## Safety
 GitHub backup exists.
 Git tag exists: safe-before-antigravity.
