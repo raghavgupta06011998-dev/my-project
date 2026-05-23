@@ -433,33 +433,52 @@ Key positions:
 
 ## 7. Assets Added to Disk But NOT Yet Implemented
 
-### Cliff Models (`public/assets/models/kenney-nature/`)
-These cliff GLBs are present on disk from the kenney-nature pack but are **not yet registered in `assetLoader.js`** and **not placed in the scene**:
+### Cliff/Mountain Assets — Status After Analysis Session (2026-05-23)
 
-| File | Type |
-|---|---|
-| `cliff_top_rock.glb` | Cliff top surface piece |
-| `cliff_large_rock.glb` | Large cliff face block |
-| `cliff_waterfall_rock.glb` | Cliff with waterfall feature |
-| `cliff_diagonal_stone.glb` | Diagonal cliff edge (stone) |
-| `cliff_halfCornerInner_rock.glb` | Half inner corner (rock) |
-| `cliff_cornerTop_stone.glb` | Corner top piece (stone) |
-| `cliff_cornerTop_rock.glb` | Corner top piece (rock) |
-| `cliff_blockSlope_rock.glb` | Sloped cliff block (rock) |
-| `cliff_blockSlopeHalfWalls_rock.glb` | Sloped cliff with half walls |
-| `cliff_blockDiagonal_rock.glb` | Diagonal block (rock) |
-| `cliff_cornerInnerTop_stone.glb` | Inner corner top (stone) |
-| `cliff_stepsCornerInner_stone.glb` | Stepped corner inner (stone) |
-| `cliff_steps_stone.glb` | Cliff steps (stone) |
-| `cliff_halfCorner_rock.glb` | Half corner (rock) |
-| `cliff_cornerLarge_stone.glb` | Large corner (stone) |
-| `cliff_blockSlopeWalls_stone.glb` | Slope with walls (stone) |
-| `cliff_blockSlope_stone.glb` | Sloped block (stone) |
-| `cliff_blockDiagonal_stone.glb` | Diagonal block (stone) |
-| `cliff_waterfall_stone.glb` | Waterfall cliff (stone) |
-| `cliff_cornerInnerTop_rock.glb` | Inner corner top (rock) |
+> **`public/assets/models/Cliffs/` is EMPTY.** The directory was created but no files were placed inside it. Use the assets described below instead — they are the correct source material.
 
-> **Status:** Assets exist on disk. Not catalogued. Not implemented. Do not add to scene until the cliff/mountain zone is planned and approved.
+#### ✅ REGISTERED in `assetLoader.js` — Not Yet Placed in Scene
+
+The following two families were catalogued in `assetLoader.js` during the 2026-05-23 session. They are **ready to use via `placeAsset()`** but have not been placed in the scene yet. The file `src/world/village/environment/cliffBackdrop.js` still needs to be created.
+
+**Family 1 — Kenney Nature Cliff System** (`kenney-nature/`, GLB, 4–12 KB each)
+Modular terrain tile system. Warm brown (`_rock` variant). Use as foreground cliff faces and base detail.
+
+| Asset Key | File | Role |
+|---|---|---|
+| `kn_cliff_block` | `cliff_block_rock.glb` | Main cliff face block |
+| `kn_cliff_large` | `cliff_large_rock.glb` | Wide cliff section |
+| `kn_cliff_top` | `cliff_top_rock.glb` | Top cap with grass |
+| `kn_cliff_half` | `cliff_half_rock.glb` | Half-width section |
+| `kn_cliff_diagonal` | `cliff_diagonal_rock.glb` | Angled cliff edge |
+| `kn_cliff_corner` | `cliff_corner_rock.glb` | Corner join |
+| `kn_cliff_corner_top` | `cliff_cornerTop_rock.glb` | Corner cap with grass |
+| `kn_cliff_slope` | `cliff_blockSlope_rock.glb` | Sloped cliff block |
+| `kn_rock_large_a` – `kn_rock_large_f` | `rock_largeA-F.glb` | 6 large boulders |
+| `kn_rock_tall_a` – `kn_rock_tall_d` | `rock_tallA-D.glb` | 4 tall rock formations |
+
+**Family 2 — KayKit Hexagon Mountains** (`kaykit-hexagon/decoration/nature/`, GLTF+BIN, 8–44 KB each)
+Proper mountain peak shapes. Stylized low-poly, single mesh, one shared atlas texture (`hexagons_medieval.png` in same folder — resolves automatically via GLTFLoader).
+
+| Asset Key | File | Role |
+|---|---|---|
+| `kk_mountain_a` | `mountain_A.gltf` | Mountain peak A (bare) |
+| `kk_mountain_b` | `mountain_B.gltf` | Mountain peak B (bare) |
+| `kk_mountain_c` | `mountain_C.gltf` | Mountain peak C (bare, largest) |
+| `kk_mountain_a_trees` | `mountain_A_grass_trees.gltf` | Peak A with grass + trees (warmest) |
+| `kk_mountain_b_grass` | `mountain_B_grass.gltf` | Peak B with grass |
+| `kk_mountain_c_trees` | `mountain_C_grass_trees.gltf` | Peak C with grass + trees (best backdrop) |
+| `kk_hill_a` | `hill_single_A.gltf` | Gentle hill A |
+| `kk_hill_b` | `hill_single_B.gltf` | Gentle hill B |
+| `kk_hill_c` | `hill_single_C.gltf` | Gentle hill C |
+| `kk_rock_a` – `kk_rock_c` | `rock_single_A-C.gltf` | 3 standalone rock shapes |
+
+#### Other Un-registered Kenney Cliff Pieces (on disk, not yet catalogued)
+These remain available in `kenney-nature/` for future use if more cliff variety is needed:
+- All `cliff_*_stone.glb` variants (cool grey tone — good for contrast detail)
+- `cliff_cave_rock.glb`, `cliff_blockCave_rock.glb` (cave entrances — future story zone use)
+- `cliff_waterfall_rock.glb`, `cliff_waterfallTop_rock.glb` (future river zone)
+- `cliff_steps_rock.glb`, `cliff_stepsCorner_rock.glb` (future mountain path climbing)
 
 ### Other Staged-but-Unused Asset Categories
 - `kenney-nature/` — additional fence, hedge, tree, pot models (some already registered)
@@ -549,12 +568,12 @@ These are load-bearing elements. Modifying them without full analysis can break 
 | 4 | Farm expansion — field, crops, fence | 🔲 Not started | extend `props/farmZone.js` |
 | 5 | School / community placeholder (Zone H) | 🔲 Not started | new `structures/schoolZone.js` |
 | 6 | Outer terrain & nature detailing | 🔲 Not started | `nature/`, terrain layer additions |
-| 7 | Cliff/mountain boundary walls (left/right/back) | 🔲 NOT YET — assets ready | new `nature/cliffWall.js` |
+| 7 | Cliff/mountain boundary walls (left/right/back) | 🟡 IN PROGRESS — assets registered, file not yet created | new `environment/cliffBackdrop.js` |
 | 8 | Detailing pass (per-house props) | 🔲 Not started | `props/` |
 | 9 | Performance / draw-call optimisation | 🔲 Not started | instancing, LOD |
 
 ### Additional Known Items
-- Register cliff models in `assetLoader.js` before using them
+- ~~Register cliff models in `assetLoader.js`~~ ✅ DONE (2026-05-23) — kn_cliff_*, kn_rock_large_*, kk_mountain_*, kk_hill_* all registered. Commit this change before next session.
 - Fix broken `crate_a/b/c/d` and `chair_a/b` paths (they point to `Dont Use/` folder)
 - `green_01–16` are labelled "Green/Bushes" but are actually **tropical fruits** — do not use as garden shrubs
 - `props_91`, `props_92` (wishing wells) are in the folder but not yet registered in ASSETS
@@ -566,7 +585,22 @@ These are load-bearing elements. Modifying them without full analysis can break 
 When ready to build, follow this sequence to avoid conflicts:
 
 ```
-1. VERIFY: Run the scene. Confirm back street is visually correct and no z-fighting.
+0. IMMEDIATE — Commit assetLoader.js (already edited, not yet committed):
+   git add src/world/village/utils/assetLoader.js
+   git commit -m "Register cliff and mountain asset keys in ASSETS catalogue"
+
+1. CLIFF BACKDROP (back + sides) — NEXT TASK, all prep work done:
+   - Create: src/world/village/environment/cliffBackdrop.js
+   - Export: createCliffBackdrop(ctx)
+   - Use placeAsset() with the kk_mountain_* and kn_cliff_* keys already registered
+   - Left wall: x = −140 to −160, z = −18 to −175 (hills → mountains, larger toward back)
+   - Right wall: mirror of left
+   - Back mountains: z = −188 to −245 (5–7 mountain models, scale 13–20)
+   - Rock scatter: kn_rock_large_a-d at cliff bases, scale 2.4–2.8
+   - NO placements at z > −15 (front stays clear)
+   - Wire into villageBuilder.js: import + call after createOuterRocks(ctx)
+   - See PROJECT_PROGRESS.md for exact coordinates of every placement
+   - Test at localhost:5173/#village, adjust scale/position in browser
 
 2. PARK ZONE (Zone F, back-left):
    - Create: src/world/village/structures/parkZone.js
@@ -586,22 +620,15 @@ When ready to build, follow this sequence to avoid conflicts:
    - Add: crop rows (kn_ nature props or kenney-food items)
    - Add: field fence on the perimeter
 
-5. CLIFF WALLS (back + sides):
-   - Create: src/world/village/nature/cliffWall.js
-   - Register cliff_*.glb keys in assetLoader.js
-   - Place modular cliff pieces ONLY on left (x < −90), right (x > +90), and back (z < −130)
-   - Stack 2–3 rows for visual depth
-   - DO NOT place in front or near spawn
-
-6. NATURE DETAILING:
+5. NATURE DETAILING:
    - Add more shrubs and flowers to lawn belt (between loop road and ring houses)
    - Add ground-level kenney-nature plants near the park and market
 
-7. DETAILING PASS:
+6. DETAILING PASS:
    - Per-house detail (crates, flowers at doors, garden items)
    - Enable/implement any disabled props files
 
-8. OPTIMISATION:
+7. OPTIMISATION:
    - Merge static geometries where possible
    - Consider InstancedMesh for repeated rocks and tree types
 ```

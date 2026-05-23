@@ -245,6 +245,46 @@ export const ASSETS = {
   kft_fountain_detail:   { path: '/assets/models/kenney-fantasy-town/fountain-round-detail.glb'   },
   kft_fountain_center:   { path: '/assets/models/kenney-fantasy-town/fountain-center.glb'         },
 
+  // ── Kenney Nature — Cliff System (warm rock variant) ────────────
+  // Modular cliff terrain tiles. Use kn_cliff_block as the main face,
+  // kn_cliff_top as the grass-capped summit, kn_cliff_large for wide sections.
+  kn_cliff_block:        { path: '/assets/models/kenney-nature/cliff_block_rock.glb'           },
+  kn_cliff_large:        { path: '/assets/models/kenney-nature/cliff_large_rock.glb'           },
+  kn_cliff_top:          { path: '/assets/models/kenney-nature/cliff_top_rock.glb'             },
+  kn_cliff_half:         { path: '/assets/models/kenney-nature/cliff_half_rock.glb'            },
+  kn_cliff_diagonal:     { path: '/assets/models/kenney-nature/cliff_diagonal_rock.glb'        },
+  kn_cliff_corner:       { path: '/assets/models/kenney-nature/cliff_corner_rock.glb'          },
+  kn_cliff_corner_top:   { path: '/assets/models/kenney-nature/cliff_cornerTop_rock.glb'       },
+  kn_cliff_slope:        { path: '/assets/models/kenney-nature/cliff_blockSlope_rock.glb'      },
+
+  // ── Kenney Nature — Rocks (large boulders + tall stones) ─────────
+  kn_rock_large_a:       { path: '/assets/models/kenney-nature/rock_largeA.glb'               },
+  kn_rock_large_b:       { path: '/assets/models/kenney-nature/rock_largeB.glb'               },
+  kn_rock_large_c:       { path: '/assets/models/kenney-nature/rock_largeC.glb'               },
+  kn_rock_large_d:       { path: '/assets/models/kenney-nature/rock_largeD.glb'               },
+  kn_rock_large_e:       { path: '/assets/models/kenney-nature/rock_largeE.glb'               },
+  kn_rock_large_f:       { path: '/assets/models/kenney-nature/rock_largeF.glb'               },
+  kn_rock_tall_a:        { path: '/assets/models/kenney-nature/rock_tallA.glb'                },
+  kn_rock_tall_b:        { path: '/assets/models/kenney-nature/rock_tallB.glb'                },
+  kn_rock_tall_c:        { path: '/assets/models/kenney-nature/rock_tallC.glb'                },
+  kn_rock_tall_d:        { path: '/assets/models/kenney-nature/rock_tallD.glb'                },
+
+  // ── KayKit Hexagon — Mountains & Hills (GLTF+BIN, CC0) ───────────
+  // Stylized low-poly mountain shapes. _grass_trees variants are warmest.
+  // Use as primary mountain backdrop and valley-side landforms.
+  kk_mountain_a:         { path: '/assets/models/kaykit-hexagon/decoration/nature/mountain_A.gltf'                },
+  kk_mountain_b:         { path: '/assets/models/kaykit-hexagon/decoration/nature/mountain_B.gltf'                },
+  kk_mountain_c:         { path: '/assets/models/kaykit-hexagon/decoration/nature/mountain_C.gltf'                },
+  kk_mountain_a_trees:   { path: '/assets/models/kaykit-hexagon/decoration/nature/mountain_A_grass_trees.gltf'    },
+  kk_mountain_b_grass:   { path: '/assets/models/kaykit-hexagon/decoration/nature/mountain_B_grass.gltf'          },
+  kk_mountain_c_trees:   { path: '/assets/models/kaykit-hexagon/decoration/nature/mountain_C_grass_trees.gltf'    },
+  kk_hill_a:             { path: '/assets/models/kaykit-hexagon/decoration/nature/hill_single_A.gltf'             },
+  kk_hill_b:             { path: '/assets/models/kaykit-hexagon/decoration/nature/hill_single_B.gltf'             },
+  kk_hill_c:             { path: '/assets/models/kaykit-hexagon/decoration/nature/hill_single_C.gltf'             },
+  kk_rock_a:             { path: '/assets/models/kaykit-hexagon/decoration/nature/rock_single_A.gltf'             },
+  kk_rock_b:             { path: '/assets/models/kaykit-hexagon/decoration/nature/rock_single_B.gltf'             },
+  kk_rock_c:             { path: '/assets/models/kaykit-hexagon/decoration/nature/rock_single_C.gltf'             },
+
   // ── Kenney Nature (trees, fences, garden props) ──
   kn_tree_oak:           { path: '/assets/models/kenney-nature/tree_oak.glb'              },
   kn_tree_detailed:      { path: '/assets/models/kenney-nature/tree_detailed.glb'         },
